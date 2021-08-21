@@ -6,13 +6,13 @@ var commentSchema = new mongoose.Schema({
         minLength: 5,
         required: true
     },
-    postId: {
-        type: 'string',
-        required: true
+    bikeId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'bike'
     },
     CommentBy: {
-        type: 'string',
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
 
     }
 }, { timestamps: { updatedAt: false } })

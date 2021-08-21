@@ -1,14 +1,14 @@
 var mongoose = require('mongoose')
 
-var postSchema = new mongoose.Schema({
-    title: {
+var bikeSchema = new mongoose.Schema({
+    name: {
         type: 'string',
-        minLength: 5,
+        minLength: 3,
         required: true
     },
-    topic: {
-        type: 'string',
-        required: true
+    type: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'type'
     },
     content: {
         type: 'string',
@@ -20,10 +20,10 @@ var postSchema = new mongoose.Schema({
         default: 0
     },
     createdBy: {
-        type: 'string',
-        required: true
-
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
     }
+
 }, { timestamps: true });
 
-module.exports = mongoose.model("post", postSchema);
+module.exports = mongoose.model("bike", bikeSchema);

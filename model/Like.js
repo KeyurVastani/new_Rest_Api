@@ -1,15 +1,17 @@
 var mongoose = require('mongoose');
 
 var likeSchema = new mongoose.Schema({
-    postId: {
-        type: 'string',
-        required: true
+    bikeId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'bike'
     },
     likedBy: {
-        type: 'string',
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
     },
     dislikedBy: {
-        type: 'string',
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
     }
 }, { timestamps: { updatedAt: false } })
 

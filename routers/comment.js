@@ -1,21 +1,24 @@
 const router = require('express').Router();
 const verify = require('../Auth/verifyLogin')
 const Comment = require('../model/Comment')
-const Post = require('../model/Post')
+const Bike = require('../model/Bike')
 const validate = require('../validation/validation')
 
-router.post("/post/:id/comment", verify, async (req, res) => {
+router.post("/bike/:id/comment", verify, async (req, res) => {
 
     try {
-        //Find Post
-        const result = await Post.findById(req.params.id)
+        //Find Bike
+        const result = await Bike.findById(req.params.id)
+        console.log(result.content);
+        
 
         //Check length
+        if(req.body.comment===undefined) return res.send('please enter the comment')
         if (validate.lengthCheck(req.body.comment, 5)) return res.send({ error: "Comment Min length 5!!!" })
-
+       
         const comment = new Comment({
             comment: req.body.comment,
-            postId: result._id,
+            bikeId: result._id,
             CommentBy: req.user
         });
 
@@ -23,11 +26,11 @@ router.post("/post/:id/comment", verify, async (req, res) => {
         res.status(201).send({
             comment: {
                 commentMsg: req.body.comment,
-                post: result
+                bike: result
             }
         })
     } catch (error) {
-        res.status(400).send({ error: "Post not found!!!" })
+        res.status(400).send({ error: "bike not found!!!" })
     }
 });
 module.exports = router

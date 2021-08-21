@@ -8,7 +8,7 @@ app.use(express.json())
 
 app.use(require('./routers/auth'));
 app.use(require('./routers/type'));
-app.use(require('./routers/post'));
+app.use(require('./routers/bike'));
 app.use(require('./routers/like'));
 app.use(require('./routers/comment'));
 

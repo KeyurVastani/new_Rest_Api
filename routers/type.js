@@ -3,7 +3,7 @@ const Type = require('../model/Type')
 const verify = require('../Auth/verifyLogin')
 const validate = require('../validation/validation')
 
-// Create New Topic
+// Create New Type
 
 router.post("/type", verify, async (req, res) => {
 

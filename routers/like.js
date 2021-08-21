@@ -1,30 +1,34 @@
 const router = require('express').Router();
 const Like = require('../model/Like')
 const verify = require('../Auth/verifyLogin')
-const Post = require('../model/Post')
+const Bike = require('../model/Bike')
 
 
-// like post
+// like the  Bike
 
-router.post("/post/like/:id", verify, async (req, res) => {
+router.post("/bike/like/:id", verify, async (req, res) => {
     try {
-        const result = await Post.findById({ _id: req.params.id })
+        const result = await Bike.findById({ _id: req.params.id })
+
         const like = new Like({
             likedBy: req.user,
-            postId: result._id
+            bikeId: result._id
         })
         const updateLike = {
             like: result.like + 1
         }
         try {
-            await Post.findOneAndUpdate({ _id: result._id }, updateLike)
-            const UpdatedLike = await Post.find({ _id: req.params.id })
+            const checkLike = await Like.findOne({ bikeId: req.params.id, likedBy: req.user })
+            if (checkLike) return res.status(400).send({error: "you are already liked"})
+
+            await Bike.findOneAndUpdate({ _id: result._id }, updateLike)
+            const UpdatedLike = await Bike.find({ _id: req.params.id })
 
             await like.save()
             res.send({
-                msg: "post Liked Successfully!!",
-                likedPost: {
-                    postID: like._id, title: result.title, totalLike: UpdatedLike[0].like
+                msg: "bike Liked Successfully!!",
+                likedBike: {
+                    LikeID: like._id, bikename: result.name, totalLike: UpdatedLike[0].like
                 }
             })
         } catch (error) {
@@ -33,42 +37,42 @@ router.post("/post/like/:id", verify, async (req, res) => {
 
     }
     catch (error) {
-        res.status(404).send({ error: "Post Not Found!!!" })
+        res.status(404).send({ error: "Bike Not Found!!!" })
     }
 })
 
 //Dislike post
-router.post("/post/dislike/:id", verify, async (req, res) => {
-    try {
-        const result = await Post.findById({ _id: req.params.id })
-        const dislike = new Like({
-            dislikedBy: req.user,
-            postId: result._id
-        })
-        try {
-            await dislike.save()
-            res.status(201).send(
-                {
-                    msg: "post disliked Successfully!!",
-                    DislikedPost: {
-                        postID: dislike._id, title: result.title
-                    }
-                })
-        } catch (error) {
-            res.status(400).send({ error: "post dislike opration is not done!!!" })
-        }
+// router.post("/bike/dislike/:id", verify, async (req, res) => {
+//     try {
+//         const result = await Bike.findById({ _id: req.params.id })
+//         const dislike = new Like({
+//             dislikedBy: req.user,
+//             bikeId: result._id
+//         })
+//         try {
+//             await dislike.save()
+//             res.status(201).send(
+//                 {
+//                     msg: "bike disliked Successfully!!",
+//                     DislikedBike: {
+//                         disLikeID: dislike._id, name: result.name
+//                     }
+//                 })
+//         } catch (error) {
+//             res.status(400).send({ error: "bike dislike opration is not done!!!" })
+//         }
 
-    }
-    catch (error) {
-        res.status(404).send({ error: "Post Not Found!!!" })
-    }
-})
+//     }
+//     catch (error) {
+//         res.status(404).send({ error: "bike Not Found!!!" })
+//     }
+// })
 
-//Dislike post
-router.get("/mostlike", async (req, res) => {
+//mostlike Bike
+router.get("/mostlikebike", async (req, res) => {
 
-    //limit => number of post 
-    Post.find().sort({ like: -1 }).limit(parseInt(req.query.limit)).find((err, result) => {
+    //limit => number of bike
+    Bike.find().sort({ like: -1 }).limit(parseInt(req.query.limit)).find((err, result) => {
         if (err) return res.status(400).send({ error: err })
         res.status(200).send(result)
     })

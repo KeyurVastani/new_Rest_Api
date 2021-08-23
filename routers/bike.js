@@ -6,33 +6,45 @@ const validate = require('../validation/validation')
 
 
 // create Bike
-router.post("/bike/:typeId", verify, async (req, res) => {
+router.post("/bike/:typename", verify, async (req, res) => {
 
     try {
+  
         //Check Correct type
-        const type = await Type.find({ _id: req.params.typeId })
+        const name=req.params.typename
+        
+        const type = await Type.find({ name })
+       
+       
         if (!type) {
             return res.status(404).send({ error: "Type Not Found!!" })
         }
         // check All fields
+       
         if (req.body.name == undefined || req.body.content == undefined)
             return res.send({ error: "All Filed is Required" })
 
         //check length
         if (validate.lengthCheck(req.body.name, 3)) return res.send({ error: "name Min length 3!!!" })
         if (validate.lengthCheck(req.body.content, 10)) return res.send({ error: "Content Min length 10!!!" })
-
+       
+            
+        const result = await Bike.findOne({ name: req.body.name })      
+        if (result) return res.send({ error: "This bike name Name Alredy Exits!!!" })
 
         const bike= new Bike({
             name: req.body.name,
-            type: type[0]._id,
+            type: type[0].name,
             content: req.body.content,
             createdBy: req.user
         })
 
         try {
+            
             await bike.save()
-            res.status(201).send({ msg: "Bike Created Sucessfully", type: type[0].name, bike })
+            // const bikeResult =await Bike.findOne({name:req.body.name}).select({"name":1,"content":1})
+           
+            res.status(201).send({ msg: "Bike Created Sucessfully", bike })
         } catch (error) {
             res.status(400).send({ msg: "bike Creation Failed!!", error })
         }
@@ -68,19 +80,21 @@ router.get('/bike/recent', (req, res) => {
 
 });
 
-// Get bike by type
-router.get('/bike/:id', (req, res) => {
-    const _id = req.params.id
+// Get bike by typename
+router.get('/bike/:typename', (req, res) => {
+    const name=req.params.typename
 
-    Bike.find({ type: _id }, (err, result) => {
+    Bike.find({ type:name }, (err, result) => {
         if (err) return res.status(400).send({ error: "Bike Not Found!!" })
+        if(result.length==0) return res.send("this type of bike is not avalable")
         res.status(200).send(result)
     })
 
-});
+})
 
 //edit Bike by bike id
 router.patch('/bike/:id', verify, async (req, res) => {
+  
 
     if (req.body.name != undefined) {
         if (validate.lengthCheck(req.body.name, 3)) return res.status(400).send({ error: ' bike name length min 3 required!!!' })
@@ -96,13 +110,14 @@ router.patch('/bike/:id', verify, async (req, res) => {
         }
     }
     if (req.body.like) return res.status(400).send({ error: 'Can not update like!!!' })
+
     const updateBike = {
         ...req.body
     }
     try {
         await Bike.findOneAndUpdate({ _id: req.params.id, createdBy: req.user._id }, updateBike)
         const updatedBike = await Bike.find({ _id: req.params.id })
-        res.send({messahe:"your bike is update",updatedBike})
+        res.send({message:"your bike is update",updatedBike})
     } catch (error) {
         res.send({ error: "Bike not Updated" })
     }
@@ -115,7 +130,8 @@ router.patch('/bike/:id', verify, async (req, res) => {
 router.delete('/bike/:id', verify, async (req, res) => {
 
     try {
-        const bike = await Bike.findOneAndDelete({ _id: req.params.id, createdBy: req.user })
+        // console.log(await Bike.findOneAndDelete({ _id: req.params.id, createdBy: req.user._id }));
+        const bike = await Bike.findOneAndDelete({ _id: req.params.id, createdBy: req.user._id })
 
         if (!bike) {
             return res.status(404).send({ error: "bike not Found" })
@@ -126,7 +142,7 @@ router.delete('/bike/:id', verify, async (req, res) => {
             Deletedbike: bike
         })
     } catch (error) {
-        res.status(500).send({ error })
+        res.status(500).send({ error:"please check the id and something wents wrong" })
     }
 })
 

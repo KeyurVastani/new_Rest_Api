@@ -9,7 +9,7 @@ router.post("/bike/:id/comment", verify, async (req, res) => {
     try {
         //Find Bike
         const result = await Bike.findById(req.params.id)
-        console.log(result.content);
+        // console.log(result);
         
 
         //Check length

@@ -9,6 +9,7 @@ const Bike = require('../model/Bike')
 router.post("/bike/like/:id", verify, async (req, res) => {
     try {
         const result = await Bike.findById({ _id: req.params.id })
+        if(!result) return res.send("bike id is not defined")
 
         const like = new Like({
             likedBy: req.user,
@@ -23,6 +24,7 @@ router.post("/bike/like/:id", verify, async (req, res) => {
 
             await Bike.findOneAndUpdate({ _id: result._id }, updateLike)
             const UpdatedLike = await Bike.find({ _id: req.params.id })
+      
 
             await like.save()
             res.send({
@@ -40,33 +42,6 @@ router.post("/bike/like/:id", verify, async (req, res) => {
         res.status(404).send({ error: "Bike Not Found!!!" })
     }
 })
-
-//Dislike post
-// router.post("/bike/dislike/:id", verify, async (req, res) => {
-//     try {
-//         const result = await Bike.findById({ _id: req.params.id })
-//         const dislike = new Like({
-//             dislikedBy: req.user,
-//             bikeId: result._id
-//         })
-//         try {
-//             await dislike.save()
-//             res.status(201).send(
-//                 {
-//                     msg: "bike disliked Successfully!!",
-//                     DislikedBike: {
-//                         disLikeID: dislike._id, name: result.name
-//                     }
-//                 })
-//         } catch (error) {
-//             res.status(400).send({ error: "bike dislike opration is not done!!!" })
-//         }
-
-//     }
-//     catch (error) {
-//         res.status(404).send({ error: "bike Not Found!!!" })
-//     }
-// })
 
 //mostlike Bike
 router.get("/mostlikebike", async (req, res) => {

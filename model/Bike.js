@@ -7,8 +7,9 @@ var bikeSchema = new mongoose.Schema({
         required: true
     },
     type: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'type'
+        type: 'string',
+        minLength: 3,
+        required: true
     },
     content: {
         type: 'string',

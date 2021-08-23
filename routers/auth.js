@@ -6,12 +6,14 @@ const validate = require('../validation/validation')
 
 
 router.post('/register', async (req, res) => {
+   
 
     //Check all value
     if (req.body.email == undefined || req.body.name == undefined || req.body.password == undefined || req.body.phone == undefined)
         return res.send({ error: "All Filed is Required" })
 
     //Email Format Check
+    
     if (!validate.emailCheck(req.body.email)) return res.status(400).send({ error: "Enter Correct Email Address!!!" })
 
     //Password Length Check
@@ -26,11 +28,12 @@ router.post('/register', async (req, res) => {
 
     //Unique Email check
     const emailCheck = await User.findOne({ email: req.body.email })
+    
     if (emailCheck) return res.status(400).send({ error: 'Email id Alredy Exits!!!' })
 
-
-    const phoneCheck = await User.findOne({ phone: req.body.phone })
-    if (phoneCheck) return res.status(400).send({ error: 'phone Alredy Exits!!!' })
+    // Unique mobile number 
+    // const phoneCheck = await User.findOne({ phone: req.body.phone })
+    // if (phoneCheck) return res.status(400).send({ error: 'phone Alredy Exits!!!' })
 
     //Encrypt Password
     const salt = await bcrypt.genSalt(10);
@@ -41,8 +44,10 @@ router.post('/register', async (req, res) => {
     });
 
     try {
-        const savedUser = await user.save();
-        res.status(201).send({ msg: "Registration Sucessfull", savedUser });
+        
+         await user.save();
+         const userDetail= await User.findOne({email:user.email}).select({"name":1,"email":1,"phone":1})
+        res.status(201).send({ msg: "Registration Sucessfull", userDetail  });
 
     } catch (error) {
         res.status(400).send({ Msg: "Registration Failed!!!", error })
@@ -61,13 +66,14 @@ router.post('/login', async (req, res) => {
 
     //Check User Details
     const user = await User.findOne({ email: req.body.email })
-    if (!user) return res.send({ error: "Email Or Password not match!!!" })
+    if (!user) return res.send({ error: "Email is not match!!!" })
 
     const validPass = await bcrypt.compare(req.body.password, user.password);
-    if (!validPass) return res.send({ error: "Email Or Password not match!!!" })
+    if (!validPass) return res.send({ error: "Password not match!!!" })
 
 
     const token = jwt.sign({ _id: user._id }, 'LanetDemobikeProject')
+
 
     //Set Auth token
     res.header('auth-token', token).send({ msg: "User Login Successfully!!", token })

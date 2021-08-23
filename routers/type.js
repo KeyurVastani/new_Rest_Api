@@ -15,7 +15,7 @@ router.post("/type", verify, async (req, res) => {
 
     //check unique Type
     const result = await Type.findOne({ name: req.body.name })
-    if (result) return res.send({ error: "type Name Alredy Exits!!!" })
+    if (result) return res.send({ error: "This Type Name Alredy Exits!!!" })
 
     const type = new Type({
         name: req.body.name,
@@ -30,10 +30,22 @@ router.post("/type", verify, async (req, res) => {
     }
 })
 
-//Get All type
-router.get("/type/", async (req, res) => {
+//Get All Type
+router.get("/types/", async (req, res) => {
     Type.find({}, (err, result) => {
         if (err) return res.status(400).send({ error: err })
+        res.status(200).send({ type: result })
+    })
+})
+
+
+//extra Api
+//get All type created by me
+router.get("/type/me",verify, async (req, res) => {
+    Type.find({ createdBy:req.user._id}, (err, result) => {
+        if (err) return res.status(400).send({ error: err })
+        console.log(result.length);
+        if(result.length === 0) return res.send("you  not create any type")
         res.status(200).send({ type: result })
     })
 })

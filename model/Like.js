@@ -9,6 +9,6 @@ var likeSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
     },
-}, { timestamps: { updatedAt: false } })
+}, { timestamps: { updatedAt: false } });
 
-module.exports = mongoose.model('Like', likeSchema)
+module.exports = mongoose.model('Like', likeSchema);

@@ -15,6 +15,6 @@ var commentSchema = new mongoose.Schema({
         ref: 'user'
 
     }
-}, { timestamps: { updatedAt: false } })
+}, { timestamps: { updatedAt: false } });
 
-module.exports = mongoose.model('Comment', commentSchema)
+module.exports = mongoose.model('Comment', commentSchema);

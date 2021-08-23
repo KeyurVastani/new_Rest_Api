@@ -11,6 +11,6 @@ var typeSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
     }
-}, { timestamps: { updatedAt: false } })
- 
-module.exports = mongoose.model('Type', typeSchema)
+}, { timestamps: { updatedAt: false } });
+
+module.exports = mongoose.model('Type', typeSchema);

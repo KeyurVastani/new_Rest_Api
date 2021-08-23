@@ -1,4 +1,4 @@
-var mongoose = require('mongoose')
+var mongoose = require('mongoose');
 
 var bikeSchema = new mongoose.Schema({
     name: {
@@ -20,6 +20,14 @@ var bikeSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    comments: [{
+        text: String,
+        postedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user'
+        }
+    }],
+
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
@@ -27,4 +35,4 @@ var bikeSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-module.exports = mongoose.model("bike", bikeSchema);
+module.exports = mongoose.model('bike', bikeSchema);

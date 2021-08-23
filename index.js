@@ -1,10 +1,9 @@
-const express = require('express')
-const app = express()
-const port = process.env.PORT || 3000
-
-require('./dataBase/mongoose')
-
-app.use(express.json())
+const express = require('express');
+const app = express();
+require('./dataBase/mongoose');
+require('dotenv').config();
+const port = process.env.DB_PORT || 4000;
+app.use(express.json());
 
 app.use(require('./routers/auth'));
 app.use(require('./routers/type'));
@@ -14,35 +13,34 @@ app.use(require('./routers/comment'));
 
 
 const authRouter = {
-    register: "/register",
-    login: "/login",
-}
+    register: '/register',
+    login: '/login',
+};
 const openRouter = {
-    getAllTopic: "/topic",
-    getAllPost: "/post",
-    getPostByTopic: "/post/:topicId",
-    getMostRecentPost: "/post/recent?limit={}",
-    getMostLikePost: "/mostlike?limit={}"
-}
+    GetAllBikeType: '/types',
+    GetAllbikes: '/bikes',
+    getBikeByBikeType: '/bike/:typename',
+    getMostRecentRegesteredBikes : '/bikes/recent?limit={}',
+    getMostLikeBike: '//mostlikebike?limit={}'
+};
 const privateRouter = {
-    createTopic: "/topic",
-    createPost: "/post/:topicId",
-    editPost: "/post/:postId",
-    deletePost: "/post/:postId",
-    likePost: "/post/like/:postId",
-    dislikePost: "/post/dislike/:postId",
-    commentOnPost: "/post/:postId/comment"
+    createType: '/type',
+    createBike: '/bike/:typename',
+    editBike: '/bike/:id',
+    deleteBike: '/bike/:id',
+    likeBike: '/bike/like/:id',
+    commentOnBike: '/bike/:id/comment'
 
-}
+};
 app.get('*', (req, res) => {
-    res.send({ Authintication: authRouter, withoutAuth: openRouter, withAuth: privateRouter })
-})
+    res.send({ urlError: 'This type of url is not present follow below url pattern', Authintication: authRouter, withoutAuth: openRouter, withAuth: privateRouter });
+});
 app.post('*', (req, res) => {
-    res.send({ Authintication: authRouter, withoutAuth: openRouter, withAuth: privateRouter })
-})
+    res.send({ urlError: 'This type of url is not present follow below url pattern',Authintication: authRouter, withoutAuth: openRouter, withAuth: privateRouter });
+});
 
 app.listen(port, () => {
-    console.log('Server is on !!!', port)
-})
+    console.log('Server is on !!!', port);
+});
 
-   // .select({ "name": 1, "content": 1 })
+// .select({ "name": 1, "content": 1 })

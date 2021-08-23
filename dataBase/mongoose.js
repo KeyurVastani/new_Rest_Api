@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 
 mongoose.connect('mongodb+srv://Keyur_Vastani:Keyur_Vastani@cluster0.rh3wt.mongodb.net/bike_require_API', {
@@ -7,6 +7,6 @@ mongoose.connect('mongodb+srv://Keyur_Vastani:Keyur_Vastani@cluster0.rh3wt.mongo
     useUnifiedTopology: true,
     useFindAndModify: false
 }, () => {
-    console.log("Connect to db!!!")
-})
+    console.log('Connect to db!!!');
+});
 

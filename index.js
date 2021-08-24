@@ -21,7 +21,7 @@ const openRouter = {
     GetAllbikes: '/bikes',
     getBikeByBikeType: '/bike/:typename',
     getMostRecentRegesteredBikes : '/bikes/recent?limit={}',
-    getMostLikeBike: '//mostlikebike?limit={}'
+    getMostLikeBike: '/mostlikebike?limit={}'
 };
 const privateRouter = {
     createType: '/type',

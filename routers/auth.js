@@ -15,6 +15,9 @@ router.post('/register', async (req, res) => {
     //Email Format Check
 
     if (!validate.emailCheck(req.body.email)) return res.status(400).send({ error: 'Enter Correct Email Address!!!' });
+    //Unique Email check
+    const emailCheck = await User.findOne({ email: req.body.email });
+    if (emailCheck) return res.status(400).send({ error: 'Email id Alredy Exits!!!' });
 
     //Password Length Check
     if (validate.strongPasswordCheck(req.body.password)) return res.status(400).send({ error: 'A minimum 8 characters password contains a combination of uppercase and lowercase letter and number are required.' });
@@ -26,9 +29,7 @@ router.post('/register', async (req, res) => {
     if (validate.numberlengthCheck(req.body.phone, 10) || isNaN(req.body.phone)) return res.status(400).send({ msg: 'Enter valid Mobile Number' });
 
 
-    //Unique Email check
-    const emailCheck = await User.findOne({ email: req.body.email });
-    if (emailCheck) return res.status(400).send({ error: 'Email id Alredy Exits!!!' });
+
 
 
     // Unique mobile number 

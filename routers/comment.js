@@ -11,11 +11,6 @@ router.post('/bike/:id/comment', verify, async (req, res) => {
         const result = await Bike.findById(req.params.id);
         if (!result) return res.send('bike id is not defined');
 
-
-
-
-
-
         //Check length
         if (!req.body.comment) return res.send('please enter the comment field');
         if (validate.lengthCheck(req.body.comment, 5)) return res.send({ error: 'Comment Min length 5!!!' });
@@ -33,12 +28,13 @@ router.post('/bike/:id/comment', verify, async (req, res) => {
             bikeId: result._id,
             CommentBy: req.user
         });
+        const result1 = await Bike.findById(req.params.id);
 
         await comment.save();
         res.status(201).send({
             comment: {
                 commentMsg: req.body.comment,
-                bike: result
+                bike: result1
             }
         });
     } catch (error) {

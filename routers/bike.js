@@ -103,14 +103,14 @@ router.get('/bike/:typename', (req, res) => {
 router.patch('/bike/:id', verify, async (req, res) => {
 
     let reqKeys = Object.keys(req.body);
-    
+
     if (Object.keys(req.body).length == 0) {
         return res.send('please enter the update value');
     }
 
     const bikedata = await Bike.find({ _id: req.params.id });
     const bikesKeys = Object.keys(bikedata[0]?.toJSON());
-   
+
     for (let i of reqKeys.values()) {
         if (!bikesKeys.includes(i)) {
             return res.send(`${i}  field is not exists`);
@@ -140,11 +140,11 @@ router.patch('/bike/:id', verify, async (req, res) => {
             return res.send('please enter the update value');
         }
         else {
-            
-            const up = await Bike.findOneAndUpdate({ _id: req.params.id }, updateBike,{new: true});
+
+            const up = await Bike.findOneAndUpdate({ _id: req.params.id }, updateBike, { new: true });
             if (!up) {
-                res.send('ypou have not authorize to update the bike ');
-            }            
+                res.send('you have not authorize to update the bike ');
+            }
             res.send({ message: 'your bike is update', up });
         }
     } catch (error) {

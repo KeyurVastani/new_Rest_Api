@@ -6,7 +6,7 @@ const emailCheck = (email) => {
 };
 
 const lengthCheck = (checkString, minLength) => {
-  
+
     if (checkString === '' || checkString.length < parseInt(minLength)) return true;
 };
 const numberlengthCheck = (checkNo, Length) => {
@@ -24,21 +24,21 @@ const strongPasswordCheck = (value) => {
     }
 };
 
-const shallowEqual = (object1, object2) => {
-    const keys1 = Object.keys(object1);
-    const keys2 = Object.keys(object2);
+// const shallowEqual = (object1, object2) => {
+//     const keys1 = Object.keys(object1);
+//     const keys2 = Object.keys(object2);
 
-    if (keys1.length !== keys2.length) {
-        return false;
-    }
+//     if (keys1.length !== keys2.length) {
+//         return false;
+//     }
 
-    for (let key of keys1) {
-        if (object1[key] !== object2[key]) {
-            return false;
-        }
-    }
-    return true;
-};
+//     for (let key of keys1) {
+//         if (object1[key] !== object2[key]) {
+//             return false;
+//         }
+//     }
+//     return true;
+// };
 
 
 
@@ -46,8 +46,7 @@ module.exports = {
     emailCheck,
     lengthCheck,
     numberlengthCheck,
-    strongPasswordCheck,
-    shallowEqual
+    strongPasswordCheck
 };
 
 
